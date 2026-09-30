@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cryptography Lab – Block Cipher Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css"></head>
+<body>
+<div class="bg-grid"></div><div id="binary-bg" class="binary-bg" aria-hidden="true"></div><canvas id="particles" aria-hidden="true"></canvas>
+<header class="nav scrolled" id="nav">
+  <a class="brand" href="index.html"><span class="brand-dot"></span>BLOCK CIPHER LAB</a>
+  <button class="burger" id="burger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  <nav class="links" id="links"><a href="index.html">Home</a><a href="index.html#modes">Modes</a><a href="#lab">Lab</a><a href="#compare">Compare</a><a href="#diff-sec">Difference</a>
+    <button class="btn btn-ghost btn-sm" id="theme" aria-label="Toggle dark or light mode">◐ Theme</button></nav>
+</header>
+<main>
+<section class="container lab-head" id="lab"><span class="badge">INTERACTIVE LAB • REAL AES</span><h1>CRYPTOGRAPHY LAB</h1><p class="sub">Experiment with AES Block Cipher Modes</p></section>
+
+<section class="container lab-grid">
+  <div class="stack">
+    <form class="glass panel" id="lab-form" onsubmit="return false" novalidate>
+      <h3>INPUT CONFIGURATION</h3>
+      <label for="mode">Mode</label>
+      <select id="mode"><option>ECB</option><option selected>CBC</option><option>CFB</option><option>OFB</option><option>CTR</option></select>
+      <label for="pt">Plaintext <small>(to decrypt, paste hex or Base64 ciphertext here)</small></label>
+      <textarea id="pt" rows="4" placeholder="Enter your message"></textarea>
+      <label for="key">AES key <small>16, 24 or 32 characters, or 32/48/64 hex digits</small></label>
+      <div class="inline"><input id="key" autocomplete="off" spellcheck="false" placeholder="Enter key"><button type="button" class="btn btn-ghost btn-sm" id="gen-key">Random</button></div>
+      <label for="iv" id="iv-label">IV (16 bytes)</label>
+      <div class="inline"><input id="iv" autocomplete="off" spellcheck="false" placeholder="Enter IV / Nonce"><button type="button" class="btn btn-ghost btn-sm" id="gen-iv">Random</button></div>
+      <p class="err" id="form-error" role="alert" hidden></p>
+      <div class="actions"><button type="button" class="btn btn-glow" id="btn-enc">ENCRYPT</button><button type="button" class="btn btn-ghost" id="btn-dec">DECRYPT</button><button type="button" class="btn btn-ghost" id="btn-clear">CLEAR</button><button type="button" class="btn btn-ghost" id="btn-reset">RESET</button></div>
+      <p class="mute small">Educational tool. History is kept in memory only and vanishes on reload.</p>
+    </form>
+    <div class="glass panel explain" id="explain"></div>
+  </div>
+
+  <div class="stack">
+    <div class="glass panel">
+      <h3>ENCRYPTION RESULT</h3>
+      <ul class="live" id="live" hidden></ul>
+      <div id="result" hidden>
+        <div class="pipeline flat">
+          <div class="node"><i>PLAINTEXT</i><code id="n-pt"></code></div><div class="pipe"><em></em></div>
+          <div class="node"><i>BLOCK DIVISION</i><code id="n-bl"></code></div><div class="pipe"><em></em></div>
+          <div class="node core"><i>ENCRYPTION PROCESS</i><code id="n-pr"></code></div><div class="pipe"><em></em></div>
+          <div class="node"><i>CIPHERTEXT</i><code id="n-ct"></code></div>
+        </div>
+        <label for="out-hex">Ciphertext · HEX</label><textarea id="out-hex" rows="3" readonly></textarea><button class="btn btn-ghost btn-sm" id="copy-hex">COPY</button>
+        <label for="out-b64">Ciphertext · Base64</label><textarea id="out-b64" rows="2" readonly></textarea><button class="btn btn-ghost btn-sm" id="copy-b64">COPY</button>
+        <button class="btn btn-glow btn-sm" id="dl">DOWNLOAD RESULT</button>
+      </div>
+      <p class="mute" id="empty-note">Press ENCRYPT to see the pipeline, ciphertext and block flow.</p>
+      <div id="dec-box" hidden><label>Decrypted plaintext</label><pre id="dec-out"></pre><button class="btn btn-ghost btn-sm" id="copy-plain">COPY PLAINTEXT</button></div>
+    </div>
+  </div>
+</section>
+
+<section class="container" id="viz-wrap" hidden>
+  <h2>BLOCK VISUALIZER <small class="mute" id="viz-title"></small> <button class="btn btn-ghost btn-sm" id="replay">▶ Replay</button></h2>
+  <p class="mute" id="viz-note" hidden>The mode changed. Press ENCRYPT again to update the diagram.</p>
+  <div class="viz" id="viz"></div><div class="glass panel detail" id="detail"></div>
+</section>
+
+<section class="container" id="compare"><h2 class="reveal">MODE COMPARISON</h2><div class="glass table-wrap reveal"><table id="cmp"></table></div></section>
+
+<section class="container" id="diff-sec">
+  <h2 class="reveal">SEE THE DIFFERENCE</h2>
+  <div class="glass panel"><label for="diff-text">Same plaintext, five modes (fixed demo key and IV)</label>
+    <div class="inline"><input id="diff-text" value="ATTACK AT DAWN ATTACK AT DAWN"><button class="btn btn-ghost btn-sm" id="diff-aligned">Use block-aligned example</button></div>
+    <p class="mute small">The default text is 29 bytes, so its repeats don't line up with 16-byte blocks. The aligned example repeats a full block, which exposes ECB. Matching colors mark identical blocks.</p>
+    <div class="diff" id="diff"></div></div>
+</section>
+
+<section class="container"><h2 class="reveal">SECURITY NOTES <small class="mute">educational information</small></h2><div class="grid three" id="secnotes"></div></section>
+
+<section class="container"><h2>ENCRYPTION HISTORY</h2><div class="glass table-wrap"><table><thead><tr><th>Mode</th><th>Time</th><th>Plaintext length</th><th>Ciphertext</th></tr></thead><tbody id="hist"></tbody></table></div>
+  <button class="btn btn-ghost btn-sm" id="clear-hist" style="margin-top:14px">CLEAR HISTORY</button></section>
+</main>
+<footer class="footer"><div class="container foot"><div><b>BLOCK CIPHER LAB</b><p>Interactive AES Block Cipher Mode Demonstration</p><small>Developed as an academic cybersecurity project.</small></div><nav><a href="index.html">Home</a><a href="index.html#modes">Modes</a><a href="README.md">Documentation</a></nav></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+<script src="js/animations.js"></script><script src="js/crypto.js"></script><script src="js/app.js"></script>
+</body></html>

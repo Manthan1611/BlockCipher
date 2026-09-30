@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Block Cipher Lab – Interactive AES Modes Simulator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="bg-grid"></div><div id="binary-bg" class="binary-bg" aria-hidden="true"></div><canvas id="particles" aria-hidden="true"></canvas>
+
+<header class="nav" id="nav">
+  <a class="brand" href="#home"><span class="brand-dot"></span>BLOCK CIPHER LAB</a>
+  <button class="burger" id="burger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  <nav class="links" id="links">
+    <a href="#home">Home</a><a href="#modes">Modes</a><a href="simulator.html">Simulator</a><a href="#how">How It Works</a><a href="#about">About</a>
+    <a class="btn btn-sm btn-glow" href="simulator.html">Launch Simulator</a>
+  </nav>
+</header>
+
+<main>
+<section class="hero container" id="home">
+  <div class="hero-copy">
+    <span class="badge">CYBERSECURITY LAB • AES ENCRYPTION</span>
+    <h1>MASTER THE ART OF<br>BLOCK CIPHER MODES</h1>
+    <p class="sub">Visualize. Encrypt. Understand.</p>
+    <p class="lead">An interactive cryptography laboratory for exploring how AES block cipher modes transform plaintext into secure ciphertext.</p>
+    <div class="cta"><a class="btn btn-glow" href="simulator.html">LAUNCH SIMULATOR</a><a class="btn btn-ghost" href="#modes">EXPLORE MODES</a></div>
+    <div class="status"><span class="pulse"></span><div><b>SYSTEM ONLINE</b><small>AES ENGINE READY</small></div></div>
+  </div>
+  <div class="glass pipeline" aria-label="Encryption pipeline">
+    <div class="node"><i>PLAINTEXT</i><code id="pt-hex">48 65 6C 6C 6F</code></div><div class="pipe"><em></em></div>
+    <div class="node"><i>BLOCK</i><code>128-bit</code></div><div class="pipe"><em></em></div>
+    <div class="node core"><i>AES</i><code id="aes-hex">SubBytes · MixColumns</code></div><div class="pipe"><em></em></div>
+    <div class="node"><i>CIPHERTEXT</i><code id="ct-hex">3A F1 09 C7 5E</code></div>
+  </div>
+</section>
+
+<section class="container" id="modes">
+  <h2 class="reveal">EXPLORE ENCRYPTION MODES</h2>
+  <div class="grid modes" id="modes-grid"></div>
+</section>
+
+<section class="container" id="how">
+  <h2 class="reveal">HOW BLOCK CIPHERS WORK</h2>
+  <ol class="steps" id="steps"></ol>
+  <div class="grid five" id="parts"></div>
+</section>
+
+<section class="container" id="insights">
+  <h2 class="reveal">SECURITY INSIGHTS</h2>
+  <div class="grid three" id="insights-grid"></div>
+</section>
+
+<section class="container" id="compare">
+  <h2 class="reveal">MODE COMPARISON</h2>
+  <div class="glass table-wrap reveal"><table id="cmp"></table></div>
+</section>
+
+<section class="container about reveal" id="about">
+  <div class="glass"><h2>ABOUT THE LAB</h2><p>Block Cipher Lab is an academic project that lets students see how ECB, CBC, CFB, OFB and CTR turn the same AES engine into very different ciphers. Part 2 adds the working encryption simulator.</p></div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="container foot">
+    <div><b>BLOCK CIPHER LAB</b><p>Interactive AES Block Cipher Mode Demonstration</p><small>Developed as an academic cybersecurity project.</small></div>
+    <nav><a href="#home">Home</a><a href="#modes">Modes</a><a href="simulator.html">Simulator</a><a href="README.md">Documentation</a></nav>
+  </div>
+</footer>
+<script src="js/animations.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
